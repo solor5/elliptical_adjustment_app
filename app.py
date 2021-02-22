@@ -95,8 +95,7 @@ def get_image_download_link(fig):
 	return f'<a href="data:file/jpg;base64,{img_str}" download="graph.png">Download graph</a>'
 
 #APLICACIÓN
-image = Image.open('/content/drive/MyDrive/Tesis William/logo.png')
-st.image(image, use_column_width=True)
+st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/logo.png', use_column_width=True)
 st.title('Femoral Segmentator')
 st.write('Program created by William Solórzano, with the support of Ph.D. Carlos Ojeda and Ph.D. Andrés Díaz Lantada.') 
 st.write('This program allows the elliptical adjustament from input points and return the coefficients of the XY projection, its parameters and the 3D points of the elliptical section to import into NX')

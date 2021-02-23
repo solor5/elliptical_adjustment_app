@@ -1,6 +1,6 @@
 streamlit==0.76.0
 numpy==1.19.5
 pandas==1.1.5
-matplotlib==3.2.2
+matplotlib==3.2.1
 sklearn==0.22.2.post1
 plotly==4.4.1

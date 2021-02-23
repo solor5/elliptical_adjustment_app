@@ -101,6 +101,7 @@ st.write('Program created by William Solórzano, with the support of Ph.D. Carlo
 st.write('This program allows the elliptical adjustament from input points and return the coefficients of the XY projection, its parameters and the 3D points of the elliptical section to import into NX')
 st.write('General equation of ellipse:')
 st.latex('Ax^2 + Bxy + Cy^2 + Dx + Ey + F')
+st.latex('z = Gx + H')
 
 multiple_files = st.file_uploader(
     "Multiple File Uploader",

@@ -102,7 +102,7 @@ st.write('This program allows the elliptical adjustament from input points and r
 st.write('General equation of ellipse:')
 st.latex('Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0')
 #st.latex('z = Gx + H')
-#st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/elipse-Page-1.png', use_column_width=True)
+st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/blob/main/elipse%20(5).png', use_column_width=True)
 
 multiple_files = st.file_uploader(
     "Multiple File Uploader",

@@ -45,7 +45,7 @@ def grafica(df, coef, i, carac):
   ax.set_title(str(i+1) +'° orthogonal projection onto XY-Plane') ####SE TIENE QUE MODIFICAR
   ax.legend(fontsize = 8.5)
 
-  textstr = 'Parameters\n$\mathrm{Xc}=%.3f$ mm\n$\mathrm{Yc}=%.3f$ mm\n$\mathrm{Major  radius}=%.3f$ mm\n$\mathrm{Minor  radius}=%.3f$ mm\n$\mathrm{Angle}=%.3f$°'%(carac[0], carac[1], carac[2], carac[3], carac[4])  
+  textstr = 'Parameters\n$\mathrm{Xc}=%.3f$ mm\n$\mathrm{Yc}=%.3f$ mm\n$\mathrm{Major \mspace18mu radius}=%.3f$ mm\n$\mathrm{Minor \mspace18mu radius}=%.3f$ mm\n$\mathrm{Angle}=%.3f$°'%(carac[0], carac[1], carac[2], carac[3], carac[4])  
   # these are matplotlib.patch.Patch properties
   props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 

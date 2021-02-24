@@ -45,7 +45,7 @@ def grafica(df, coef, i, carac):
   ax.set_title(str(i+1) +'° orthogonal projection onto XY-Plane') ####SE TIENE QUE MODIFICAR
   ax.legend(fontsize = 8.5)
 
-  textstr = 'Parameters\n$\mathrm{Xc}=%.3f$ mm\n$\mathrm{Yc}=%.3f$ mm\n$\mathrm{Major radius}=%.3f$ mm\n$\mathrm{Minor radius}=%.3f$ mm\n$\mathrm{Angle}=%.3f$°'%(carac[0], carac[1], carac[2], carac[3], carac[4])  
+  textstr = 'Parameters\n$\mathrm{Xc}=%.3f$ mm\n$\mathrm{Yc}=%.3f$ mm\n$\mathrm{Major  radius}=%.3f$ mm\n$\mathrm{Minor  radius}=%.3f$ mm\n$\mathrm{Angle}=%.3f$°'%(carac[0], carac[1], carac[2], carac[3], carac[4])  
   # these are matplotlib.patch.Patch properties
   props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
@@ -101,8 +101,8 @@ st.write('Program created by William Solórzano, with the support of Ph.D. Carlo
 st.write('This program allows the elliptical adjustament from input points and return the coefficients of the XY projection, its parameters and the 3D points of the elliptical section to import into NX')
 st.write('General equation of ellipse:')
 st.latex('Ax^2 + Bxy + Cy^2 + Dx + Ey + F = 0')
-st.latex('z = Gx + H')
-st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/elipse-Page-1.png', use_column_width=True)
+#st.latex('z = Gx + H')
+#st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/elipse-Page-1.png', use_column_width=True)
 
 multiple_files = st.file_uploader(
     "Multiple File Uploader",

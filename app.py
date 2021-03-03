@@ -11,6 +11,7 @@ import plotly.express as px
 import base64
 import io
 from io import BytesIO
+
 ##FUNCTIONS
 def s(n):
   if n>=0:
@@ -119,6 +120,7 @@ st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/i3.p
 st.write('Result (step **4**)')
 st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/i4.png', use_column_width=True)
 st.write('For more details, please contact us at wsrequejo@gmail.com')
+st.write('Download examples of input data: [test1.dat](https://drive.google.com/file/d/1ySmmEaRndP8I50O8w2HTt6dszTK7HnZ1/view?usp=sharing) and [test2.dat](https://drive.google.com/file/d/1E9cR7NHiX1tBGLpGaPQ_c_y5ovv-UfB9/view?usp=sharing)')
 multiple_files = st.file_uploader("Multiple File Uploader", accept_multiple_files=True, type='dat')
 
 count=0

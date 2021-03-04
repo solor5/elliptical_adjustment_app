@@ -1,1 +1,1 @@
-# femoral_segmentator
+# bone_segmentator

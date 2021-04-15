@@ -77,8 +77,8 @@ def parameters(coef):
   a=coef[0]; b=coef[1]/2; c=coef[2]; d=coef[3]/2; f=coef[4]/2; g=coef[5]
   Xc=(c*d-b*f)/(b**2-a*c)
   Yc=(a*f-b*d)/(b**2-a*c)
-  ac=math.sqrt((2*(a*f**2+c*d**2+g*b**2-2*b*d*f-a*c*g))/((b**2-a*c)*((math.sqrt((a-c)**2+4*b**2))-(a+c))))
-  bc=math.sqrt((2*(a*f**2+c*d**2+g*b**2-2*b*d*f-a*c*g))/((b**2-a*c)*(-1*(math.sqrt((a-c)**2+4*b**2))-(a+c))))
+  RM=math.sqrt((2*(a*f**2+c*d**2+g*b**2-2*b*d*f-a*c*g))/((b**2-a*c)*((math.sqrt((a-c)**2+4*b**2))-(a+c))))
+  rm=math.sqrt((2*(a*f**2+c*d**2+g*b**2-2*b*d*f-a*c*g))/((b**2-a*c)*(-1*(math.sqrt((a-c)**2+4*b**2))-(a+c))))
   if b==0 and a<c:
     alpha=0
   elif b==0 and a>c:
@@ -87,7 +87,7 @@ def parameters(coef):
     alpha=(math.atan(2*b/(a-c))/2)*(180/math.pi) 
   elif b!=0 and a>c:
     alpha=(math.pi/2+(math.atan(2*b/(a-c)))/2)*(180/math.pi) #sexagesimal degrees
-  prm = [Xc, Yc, ac, bc, alpha]
+  prm = [Xc, Yc, RM, rm, alpha]
   return prm
 
 def get_table_download_link(v): 

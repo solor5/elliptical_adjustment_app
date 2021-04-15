@@ -74,11 +74,11 @@ def graph(df, coef, i, prm):
   return fig, v, df_out
 
 def parameters(coef):
-  a=coef[0]; b=coef[1]/2; c=coef[2]; d=coef[3]/2; f=coef[4]/2; g=coef[5]
-  Xc=(c*d-b*f)/(b**2-a*c)
-  Yc=(a*f-b*d)/(b**2-a*c)
-  R=math.sqrt((2*(a*f**2+c*d**2+g*b**2-2*b*d*f-a*c*g))/((b**2-a*c)*((math.sqrt((a-c)**2+4*b**2))-(a+c))))
-  r=math.sqrt((2*(a*f**2+c*d**2+g*b**2-2*b*d*f-a*c*g))/((b**2-a*c)*(-1*(math.sqrt((a-c)**2+4*b**2))-(a+c))))
+  a=coef[0]; b=coef[1]/2; c=coef[2]; d=coef[3]/2; e=coef[4]/2; f=coef[5]
+  Xc=(c*d-b*e)/(b**2-a*c)
+  Yc=(a*e-b*d)/(b**2-a*c)
+  R=math.sqrt((2*(a*e**2+c*d**2+f*b**2-2*b*d*e-a*c*f))/((b**2-a*c)*((math.sqrt((a-c)**2+4*b**2))-(a+c))))
+  r=math.sqrt((2*(a*e**2+c*d**2+f*b**2-2*b*d*e-a*c*f))/((b**2-a*c)*(-1*(math.sqrt((a-c)**2+4*b**2))-(a+c))))
   if b==0 and a<c:
     alpha=0
   elif b==0 and a>c:

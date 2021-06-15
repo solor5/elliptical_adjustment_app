@@ -103,7 +103,7 @@ def get_image_download_link(fig):
 
 #APP
 st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/logo.png', use_column_width=True)
-st.title('Bone segmentator')
+st.title('Elliptical adjustment application')
 st.write('Program created by [William Solórzano](https://www.linkedin.com/in/william-solórzano/), with the support of Ph.D. Carlos Ojeda and Ph.D. Andrés Díaz Lantada.') 
 st.write('This program allows the elliptical adjustment from input points in DAT format. They are obtained from NX by sampling the curve (internal cortical) using points as you can see in step **1**, '
 'then export and introduce them into the multiple file uploader. For more details about this sampling process watch this video: https://www.youtube.com/watch?v=EccJgM05Mfc&list=LL&index=17.')

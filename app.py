@@ -102,23 +102,23 @@ def get_image_download_link(fig):
 	return f'<a href="data:file/jpg;base64,{img_str}" download="graph.png">Download graph</a>'
 
 #APP
-st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/logo.png', use_column_width=True)
+st.image('https://raw.githubusercontent.com/solor5/elliptical_adjustment_app/main/logo.png', use_column_width=True)
 st.title('Elliptical adjustment application')
 st.write('Program created by [William Solórzano](https://www.linkedin.com/in/william-solórzano/), with the support of Ph.D. Carlos Ojeda and Ph.D. Andrés Díaz Lantada.')
 st.write('This program allows the elliptical adjustment from input points in DAT format. They are obtained from NX by sampling the curve (internal cortical) using points as you can see in step **1**, '
 'then export and introduce them into the multiple file uploader. For more details about this sampling process watch this video: https://www.youtube.com/watch?v=EccJgM05Mfc&list=LL&index=17.')
-st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/i1.png', use_column_width=True)
+st.image('https://raw.githubusercontent.com/solor5/elliptical_adjustment_app/main/i1.png', use_column_width=True)
 st.write('The input file contains X, Y, and Z coordinates of each sample point. X and Y coordinates let the elliptical adjustment of the orthogonal projection of the fitted curve, as consequence the coefficients'
 ' of the ellipse ($Ax^2 + Bxy + Cy^2 + Dx +Ey +F = 0$) are obtained. The fitted curve is the intersection between elliptical cylinder (adjusted ellipse with Z direction) with a plane ($z = Gx + H$), G and H constants'
 ' are fitted employing linear regression from the X and Z coordinates (step **2**).')
-st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/i2.png', use_column_width=True)
+st.image('https://raw.githubusercontent.com/solor5/felliptical_adjustment_app/main/i2.png', use_column_width=True)
 st.write('There are two ways to export the fitted curve to NX. Step **3A** permits that the user obtains the points of the fitted curve in DAT format by clicking on **Download DAT file** then import these points to NX' 
 ' and with its spline tool get the fitted curve. Likewise, the program provides a 2D graph of the orthogonal projection onto XY-Plane, this graph has its parameters (Xc, Yc, major and minor radius, and the angle),'
 ' they are introduced to the ellipse tool of NX and finally, the ellipse is projected to the plane to obtain the fitted curve (step **3B**). Furthermore, the program allows downloading the 2D graph of the orthogonal' 
 ' projection and provides the user with a 3D view of the fitted curves.')
-st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/i3.png', use_column_width=True)
+st.image('https://raw.githubusercontent.com/solor5/elliptical_adjustment_app/main/i3.png', use_column_width=True)
 st.write('Result (step **4**)')
-st.image('https://raw.githubusercontent.com/solor5/femoral_segmentator/main/i4.png', use_column_width=True)
+st.image('https://raw.githubusercontent.com/solor5/elliptical_adjustment_app/main/i4.png', use_column_width=True)
 st.write('For more details, please contact us at wsrequejo@gmail.com')
 st.write('Download examples of input data: [test1.dat](https://drive.google.com/file/d/1ySmmEaRndP8I50O8w2HTt6dszTK7HnZ1/view?usp=sharing) and [test2.dat](https://drive.google.com/file/d/1E9cR7NHiX1tBGLpGaPQ_c_y5ovv-UfB9/view?usp=sharing)')
 multiple_files = st.file_uploader("Multiple File Uploader", accept_multiple_files=True, type='dat')

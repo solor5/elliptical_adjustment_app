@@ -1,1 +1,1 @@
-# bone_segmentator
+# elliptical_adjustment_app

@@ -20,21 +20,6 @@ def s(n):
     sign = '-'
   return sign
 
-def adjustment(df):
-  xy=df.iloc[:,0:2].values #X and Y coordinates
-  Dx=[]
-  for i in range(0,xy.shape[0],1):
-    x=xy[i,0] 
-    y=xy[i,1]
-    Dx.append([x**2, x*y, y**2, x, y, 1])
-  M=np.matmul(np.transpose(Dx),np.array(Dx)) #Multiplication between the transpose of Dx and Dx
-  Eva, Eve=np.linalg.eig(M) #eigenvalues(Eva) and eigenvectors(Eve)
-  ##Finding the position of the least eigenvalue
-  posicion=np.where(Eva == np.amin(Eva)) #tuple
-  #Obtaining the corresponding eigenvector
-  coef=Eve[:,posicion[0][0]] 
-  return coef
-
 def graph(df, coef, i, prm):
   #GRAPH
   delta = 2
@@ -73,7 +58,36 @@ def graph(df, coef, i, prm):
   ax.text(0.5, 0.1, textstr2, transform=ax.transAxes, fontsize=7, verticalalignment='top', horizontalalignment='center', bbox=props)
   return fig, v, df_out
 
-def parameters(coef):
+
+def get_table_download_link(v): 
+  v = pd.DataFrame(v).to_csv(index=False)
+  b64 = base64.b64encode(v.encode()).decode()  # some strings <-> bytes conversions necessary here
+  return f'<a href="data:application/octet-stream;base64,{b64}" download="points.dat">Download DAT file</a>'
+
+def get_image_download_link(fig):
+	buffered = BytesIO()
+	fig.savefig(buffered, format="png", dpi=300)
+	img_str = base64.b64encode(buffered.getvalue()).decode()
+	return f'<a href="data:file/jpg;base64,{img_str}" download="graph.png">Download graph</a>'
+
+
+# AÑADIDOS A PARTIR DEL TFM
+## AJUSTE ELÍPTICO 
+def elliptical_fit(data):
+  Dx=[]
+  for i in range(0, data.shape[0], 1):
+    x = data[i][0]
+    y = data[i][1]
+    Dx.append([x**2, x*y, y**2, x, y, 1])
+  D = np.dot(np.transpose(Dx),np.array(Dx)) #Multiplication between the transpose of Dx and Dx
+  Eva, Eve = np.linalg.eig(D) #eigenvalues(Eva) and eigenvectors(Eve)
+  ##Finding the position of the least eigenvalue
+  posicion = np.where(Eva == np.amin(Eva)) #tuple
+  #Obtaining the corresponding eigenvector
+  coef = Eve[:,posicion[0][0]] 
+  return coef
+
+def elliptical_parameters(coef):
   a=coef[0]; b=coef[1]/2; c=coef[2]; d=coef[3]/2; e=coef[4]/2; f=coef[5]
   Xc=(c*d-b*e)/(b**2-a*c)
   Yc=(a*e-b*d)/(b**2-a*c)
@@ -90,16 +104,69 @@ def parameters(coef):
   prm = [Xc, Yc, R, r, alpha]
   return prm
 
-def get_table_download_link(v): 
-  v = pd.DataFrame(v).to_csv(index=False)
-  b64 = base64.b64encode(v.encode()).decode()  # some strings <-> bytes conversions necessary here
-  return f'<a href="data:application/octet-stream;base64,{b64}" download="points.dat">Download DAT file</a>'
+# Distancia algebraica de la elipse
+def elliptical_distance(x, y, coef):
+  return ((coef[0]/coef[0])*x**2 + (coef[1]/coef[0])*x*y + (coef[2]/coef[0])*y**2 + (coef[3]/coef[0])*x + (coef[4]/coef[0])*y + (coef[5]/coef[0]))*abs(coef[0])
 
-def get_image_download_link(fig):
-	buffered = BytesIO()
-	fig.savefig(buffered, format="png", dpi=300)
-	img_str = base64.b64encode(buffered.getvalue()).decode()
-	return f'<a href="data:file/jpg;base64,{img_str}" download="graph.png">Download graph</a>'
+## RANSAC
+# max_iter =  nº máximo de iteraciones
+# N = tamaño de la muestra
+# data = son las coordenadas (x, y) extraidas de la sección a ajustar
+# f_fit = función de ajuste, depende si es un círculo o una elipse
+# f_distance =  función de distancia algebraica, depende si es un círculo o una elipse 
+def ransac(max_iter, N, data, f_fit, f_distance):
+
+  #####AÑADIDO######
+  data=data.iloc[:,0:2].values #X and Y coordinates
+  #####AÑADIDO######´
+
+
+  inliers = np.empty((0, 2)) # inliers, matriz vacia
+
+  l_epoch = []
+  l_parm = []
+  l_coef = []
+
+  for epoch in range(max_iter):
+    ## Muestras
+    spr = [] # se almacenan los index que se deben eliminar de la matriz de inliers 
+    sample = data[np.random.choice(data.shape[0], N, replace=False), :] # N corresponde al tamaño de la muestra 
+    coef_current = f_fit(sample) # ajuste de la muestra
+    ## Distancia algebraica con la muestra para determinar que puntos son inliers 
+    for i in range(0, sample.shape[0], 1):
+      distance = f_distance(sample[i][0], sample[i][1], coef_current)
+      if distance <= 0: # para asegurarse que la elipse/círculo queda dentro de la sección interna, propiedades de la distancia algebraica 
+        inliers = np.append(inliers, sample[i].reshape((1,2)), axis=0) # reshape para poder agregar datos a la matriz 
+
+    # Eliminar líneas duplicadas en INLIERS      
+    inliers = np.unique(inliers, axis=0)
+    # Verificación de inliers (segunda comprobación)/ necesito tres puntos para definir el círculo/elipse
+    if inliers.shape[0] >= 3: # condición para tener los suficientes puntos y hacer el análisis
+      coef_new = f_fit(inliers) # ajuste con los inliers
+      # Media y desviación estándar de todos los puntos con el ajuste realizado con los inliers
+      mean = np.mean(f_distance(data[:,0], data[:,1], coef_new))
+      std = np.std(f_distance(data[:,0], data[:,1], coef_new))
+      if mean - std >= 0:
+        l_epoch.append(epoch + 1)
+        l_parm.append(mean - std)
+        l_coef.append(coef_new)
+      else:
+        for j in range(0, inliers.shape[0], 1):
+          distance = f_distance(inliers[j][0], inliers[j][1], coef_new)
+          if distance >= 0: #para asegurarse que la elipse queda dentro de la sección, tanto como sea posible
+            spr.append(j) # se agregan los index de los puntos que deben eliminarse 
+        inliers = np.delete(inliers, spr, axis=0) # para eliminar los puntos 
+
+  # Para encontrar el valor máximo
+  max_value = max(l_parm)
+  coef_def = l_coef[l_parm.index(max_value)]
+
+  # Para visualizar la gráfica de entrenamiento (SI NO SE QUIERE VISUALIZAR LA GRÁFICA, COMENTAR ESTA PARTE)
+  #fig = go.Figure(data=go.Scatter(x=l_epoch, y=l_parm, name = 'Épocas', mode='lines+markers'))
+  #fig['layout'].update(height = 600, width = 900, template="plotly_white")
+  #fig.show()
+
+  return coef_def
 
 #APP
 st.image('https://raw.githubusercontent.com/solor5/elliptical_adjustment_app/main/logo.png', use_column_width=True)
@@ -129,7 +196,7 @@ df_united = pd.DataFrame() #empty dataframe
 if len(multiple_files)>0:
   st.header('**Input data**\n')
   for file in multiple_files: #multiple file uploader
-    file_container = st.beta_expander(f"File name: {file.name} (" + str(count+1) + "°)")
+    file_container = st.expander(f"File name: {file.name} (" + str(count+1) + "°)")
     data = io.BytesIO(file.getbuffer())
     #Preprocessing 
     df = pd.read_csv(data, sep=",", names=('X','Y','Z')) #Input data in DAT format
@@ -144,8 +211,13 @@ if len(multiple_files)>0:
   st.header('\n**Elliptical adjustment**\n')
 
   for i in range(0,len(multiple_files),1):
-    locals()["coef_" + str(i)] = adjustment(locals()["df_" + str(i)]) #adjustment, the coef is obtained
-    locals()["prm_" + str(i)] = parameters(locals()["coef_" + str(i)]) #parameters, the prm is obtained
+    #####AÑADIDO######
+    n_ite = 300 # número de iteraciones 
+    n_sample = 10 # número de muestras   
+    locals()["coef_" + str(i)] = ransac(n_ite, n_sample, locals()["df_" + str(i)], elliptical_fit, elliptical_distance)
+    st.write(locals()["coef_" + str(i)])
+    #####AÑADIDO######
+    locals()["prm_" + str(i)] = elliptical_parameters(locals()["coef_" + str(i)]) #parameters, the prm is obtained
     locals()["fig_" + str(i)], locals()["v_" + str(i)], locals()["df_" + str(i)] = graph(locals()["df_" + str(i)], locals()["coef_" + str(i)],i, locals()["prm_" + str(i)]) 
     st.pyplot(locals()["fig_" + str(i)])
     st.markdown(get_image_download_link(locals()["fig_" + str(i)]), unsafe_allow_html=True)
